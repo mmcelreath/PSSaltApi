@@ -1,14 +1,14 @@
 function Invoke-SaltApiFunction {
     [CmdletBinding(SupportsShouldProcess = $true)]
     param (
-        [Parameter(Mandatory=$true, Position=0)]
+        [Parameter(Mandatory = $true, Position = 0)]
         [string]
         [ValidateSet('local', 'runner', 'wheel')]
         $Client,
-        [Parameter(Mandatory=$true, Position=1)]
+        [Parameter(Mandatory = $true, Position = 1)]
         [string]
         $Target,
-        [Parameter(Mandatory=$true, Position=2)]
+        [Parameter(Mandatory = $true, Position = 2)]
         [string]
         $Function,
         [Parameter(Mandatory = $false)]    
@@ -33,8 +33,8 @@ function Invoke-SaltApiFunction {
     }
 
     $server = $global:SaltAPIConnection.Server
-    $port = $global:SaltAPIConnection.Port
-    $token = $global:SaltAPIConnection.Token
+    $port   = $global:SaltAPIConnection.Port
+    $token  = $global:SaltAPIConnection.Token
 
     $url = "https://${server}:$port/"
 
@@ -46,16 +46,16 @@ function Invoke-SaltApiFunction {
 
     $body = @{
         client = $Client
-        tgt = $Target
-        fun = $Function
+        tgt    = $Target
+        fun    = $Function
     }
 
     $webRequestParams = @{
-        Uri = $url 
+        Uri                  = $url 
         SkipCertificateCheck = $SkipCertificateCheck
-        Body = (ConvertTo-Json $body)
-        Headers = $header
-        Method = 'Post'
+        Body                 = (ConvertTo-Json $body)
+        Headers              = $header
+        Method               = 'Post'
     }
 
     if ($TimeoutSec) {
@@ -66,9 +66,9 @@ function Invoke-SaltApiFunction {
         $webRequest = Invoke-WebRequest @webRequestParams
 
         $properties = @{
-            StatusCode = $webRequest.StatusCode
+            StatusCode        = $webRequest.StatusCode
             StatusDescription = $webRequest.StatusDescription
-            Content = $webrequest.Content | ConvertFrom-Json | Select-Object -ExpandProperty return
+            Content           = $webrequest.Content | ConvertFrom-Json | Select-Object -ExpandProperty return
         }
     
         $obj = New-Object -TypeName PSCustomObject -Property $properties
