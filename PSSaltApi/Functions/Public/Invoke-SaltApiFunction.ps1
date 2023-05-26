@@ -22,11 +22,6 @@ function Invoke-SaltApiFunction {
         $TimeoutSec
     )
 
-    # # Tests
-    # $Client = 'local'
-    # $Target = '*'
-    # $Function = 'test.version'
-
     # Check to see if there is an existing connection to SaltStack
     if (!$global:SaltAPIConnection) {
         Write-Error 'You are not currently connected to any SaltStack APIs. Please connect first using Connect-SaltApi.'
