@@ -1,18 +1,26 @@
 ﻿Function Connect-SaltApi {
     <#
     .NOTES
-    # eAuthSystem: Salt's External Authentication System (eAuth) allows for Salt to pass through command authorization to any external authentication system, such as PAM or LDAP.
-    # eAuth using the PAM external auth system requires salt-master to be run as root as this system needs root access to check authentication.
-    # https://docs.saltproject.io/en/latest/topics/eauth/index.html#acl-eauth
+    
     .SYNOPSIS
     Use this function to authenicate with the Salt API
     .DESCRIPTION
     This function will allow you to connect to a salt-api instance. Once authenticated, a new token will be generated that has an expiration of 12 hours (by default).
     A global variable ($global:SaltAPIConnection) will be set with the Servername & Token details for use by other functions in the module.
-    .EXAMPLE
-    Connect-SaltApi -Server 'salt.example.com' -Credential $InternalUserCred
 
-    This will default to internal user authentication.
+    To use this module, a Salt Master needs to be configured with REST_CHERRYPY. Here are some helpful links that got me started.
+
+    https://docs.saltproject.io/en/latest/ref/netapi/all/salt.netapi.rest_cherrypy.html
+    https://docs.saltproject.io/en/latest/topics/eauth/index.html#acl-eauth
+    https://docs.saltproject.io/en/latest/topics/eauth/access_control.html#acl
+
+    - eAuthSystem: Salt's External Authentication System (eAuth) allows for Salt to pass through command authorization to any external authentication system, such as PAM or LDAP.
+    - eAuth using the PAM external auth system requires salt-master to be run as root as this system needs root access to check authentication.
+    - https://docs.saltproject.io/en/latest/topics/eauth/index.html#acl-eauth
+    .EXAMPLE
+    Connect-SaltApi -Server 'salt.example.com' -Credential $Credential
+
+    This will default to PAM authentication forthe Exterhan Authentication System (eAuth).
     .EXAMPLE
     Connect-SaltApi -Server 'salt.example.com'
 
@@ -20,9 +28,10 @@
     .EXAMPLE
     $creds = Get-Credential
 
-    Connect-SaltApi -Server 'salt.example.com' -Credential $creds -AuthSource 'LAB Directory'
+    Connect-SaltApi -Server 'salt.example.com' -Credential $Credential -eAuthSystem 'LDAP'
 
-    This will connect to the 'LAB Directory' LDAP authentication source using a specified credential.
+    This will connect by authenticating with an LDAP Exterhan Authentication System (eAuth).
+    https://docs.saltproject.io/en/latest/ref/auth/all/index.html
 #>
     param(
         [Parameter(Mandatory=$true, Position=0)]
@@ -30,6 +39,7 @@
         $Server,
         [Parameter(Mandatory=$false, Position=3)]
         [string]
+        [ValidateSet('auto', 'django', 'file', 'keystone', 'ldap', 'mysql', 'pam', 'pki', 'rest', 'sharedsecret', 'yubico')]
         $eAuthSystem = 'pam',
         [Parameter(Mandatory = $true)]
         [PSCredential]
@@ -110,7 +120,7 @@
     
         # Return the connection object
         $global:SaltAPIConnection
-        
+
     } catch {
         Write-Error ("Failure connecting to $server. " + $_)
     } # end try/catch block
