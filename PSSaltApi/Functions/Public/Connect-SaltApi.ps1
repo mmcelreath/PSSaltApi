@@ -105,8 +105,9 @@
 
         $tokenDetails = $tokenRequest.Content | convertfrom-json | select -ExpandProperty return
 
-        $obj = @{
+        $properties = @{
             Server = $server
+            Port   = $port
             URL    = $url
             Token  = $tokenDetails.token
             Expire = $tokenDetails.expire
@@ -116,7 +117,7 @@
             perms  = $tokenDetails.perms            
         }
 
-        $global:SaltAPIConnection = New-Object -TypeName psobject -Property $obj
+        $global:SaltAPIConnection = New-Object -TypeName psobject -Property $properties
     
         # Return the connection object
         $global:SaltAPIConnection

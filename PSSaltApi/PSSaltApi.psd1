@@ -33,7 +33,7 @@
     Description = 'SaltStack API module. Provides function wrappers for the salt-api.'
     
     # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
-    FunctionsToExport = @('Connect-SaltApi', 'Disconnect-SaltApi')
+    FunctionsToExport = @('Connect-SaltApi', 'Disconnect-SaltApi', 'Invoke-SaltApiFunction')
     
     # Minimum version of the PowerShell engine required by this module
     # PowerShellVersion = ''
