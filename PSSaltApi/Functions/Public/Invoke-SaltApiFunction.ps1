@@ -1,3 +1,19 @@
+# Add note about 400 Bad Request
+# Client disabled: 'wheel'. Add to 'netapi_enable_clients' master config option to enable.
+
+# Invoke-SaltApiFunction -Client wheel  -Function 'key.list_all' -SkipCertificateCheck
+
+# $arg = @('highstate')
+# Invoke-SaltApiFunction -Client local  -Function 'state.apply' -Arguments $arg -SkipCertificateCheck -Target '*'
+
+# Invoke-SaltApiFunction -Client local -Target '*' -Function 'state.highstate'-SkipCertificateCheck 
+
+# Invoke-SaltApiFunction -Client local -Target '*' -Function 'test.version' -SkipCertificateCheck 
+# Invoke-SaltApiFunction -Client local -Target '*' -Function 'test.ping' -SkipCertificateCheck 
+
+# Invoke-SaltApiFunction -Client local -Target '*' -Function 'grains.items' -SkipCertificateCheck
+# Invoke-SaltApiFunction -Client local -Target '*' -Function 'grains.get' -SkipCertificateCheck -Arguments 'nodename'
+
 function Invoke-SaltApiFunction {
     [CmdletBinding(SupportsShouldProcess = $true)]
     param (
@@ -5,12 +21,14 @@ function Invoke-SaltApiFunction {
         [string]
         [ValidateSet('local', 'runner', 'wheel')]
         $Client,
-        [Parameter(Mandatory = $true, Position = 1)]
+        [Parameter(Mandatory = $false, Position = 1)]
         [string]
         $Target,
         [Parameter(Mandatory = $true, Position = 2)]
         [string]
-        $Function,
+        $Function,[Parameter(Mandatory = $false, Position = 3)]
+        # [string]
+        $Arguments,
         [Parameter(Mandatory = $false)]    
         [Switch]
         $SkipCertificateCheck = $false,
@@ -51,8 +69,17 @@ function Invoke-SaltApiFunction {
 
     $body = @{
         client = $Client
-        tgt    = $Target
         fun    = $Function
+        # tgt    = $Target
+        # arg    = @('highstate')
+    }
+
+    if ($Target) {
+        $body.Add('tgt', $Target)
+    }
+
+    if ($Arguments) {
+        $body.Add('arg', $Arguments)
     }
 
     $webRequestParams = @{
