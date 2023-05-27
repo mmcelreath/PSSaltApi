@@ -41,9 +41,9 @@ function Invoke-SaltApiFunction {
     )
 
     # # Tests
-    # $Client = 'local'
-    # $Target = '*'
-    # $Function = 'test.version'
+    # $Client = 'wheel'
+    # $Target = $null
+    # $Function = 'key.accept'
 
     # Check to see if there is an existing connection to SaltStack
     if (!$global:SaltAPIConnection) {
