@@ -1,18 +1,6 @@
 # Add note about 400 Bad Request
 # Client disabled: 'wheel'. Add to 'netapi_enable_clients' master config option to enable.
 
-# Invoke-SaltApiFunction -Client wheel  -Function 'key.list_all' -SkipCertificateCheck
-
-# $arg = @('highstate')
-# Invoke-SaltApiFunction -Client local  -Function 'state.apply' -Arguments $arg -SkipCertificateCheck -Target '*'
-
-# Invoke-SaltApiFunction -Client local -Target '*' -Function 'state.highstate'-SkipCertificateCheck 
-
-# Invoke-SaltApiFunction -Client local -Target '*' -Function 'test.version' -SkipCertificateCheck 
-# Invoke-SaltApiFunction -Client local -Target '*' -Function 'test.ping' -SkipCertificateCheck 
-
-# Invoke-SaltApiFunction -Client local -Target '*' -Function 'grains.items' -SkipCertificateCheck
-# Invoke-SaltApiFunction -Client local -Target '*' -Function 'grains.get' -SkipCertificateCheck -Arguments 'nodename'
 
 function Invoke-SaltApiFunction {
     [CmdletBinding(SupportsShouldProcess = $true)]
@@ -26,9 +14,13 @@ function Invoke-SaltApiFunction {
         $Target,
         [Parameter(Mandatory = $true, Position = 2)]
         [string]
-        $Function,[Parameter(Mandatory = $false, Position = 3)]
+        $Function,
+        [Parameter(Mandatory = $false, Position = 3)]
         # [string]
-        $Arguments,
+        $Arg,
+        [Parameter(Mandatory = $false, Position = 4)]
+        [hashtable]
+        $kwarg,
         [Parameter(Mandatory = $false)]    
         [Switch]
         $SkipCertificateCheck = $false,
@@ -43,7 +35,7 @@ function Invoke-SaltApiFunction {
     # # Tests
     # $Client = 'wheel'
     # $Target = $null
-    # $Function = 'key.accept'
+    # $Function = 'key.finger'
 
     # Check to see if there is an existing connection to SaltStack
     if (!$global:SaltAPIConnection) {
@@ -72,14 +64,22 @@ function Invoke-SaltApiFunction {
         fun    = $Function
         # tgt    = $Target
         # arg    = @('highstate')
+        # match   = @('minion1')
+        # include_rejected = $true
+    }
+
+    if ($Kwarg) {
+        foreach ($k in $kwarg.keys) {
+            $body.Add($k, $kwarg[$k])
+        }
     }
 
     if ($Target) {
         $body.Add('tgt', $Target)
     }
 
-    if ($Arguments) {
-        $body.Add('arg', $Arguments)
+    if ($Arg) {
+        $body.Add('arg', $Arg)
     }
 
     $webRequestParams = @{
