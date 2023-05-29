@@ -28,6 +28,8 @@ Invoke-SaltApiFunction -Client local -Target '*' -Function 'test.ping' -SkipCert
 Invoke-SaltApiFunction -Client local -Target '*' -Function 'grains.items' -SkipCertificateCheck
 Invoke-SaltApiFunction -Client local -Target '*' -Function 'grains.get' -SkipCertificateCheck -Arg 'nodename'
 
+# https://docs.saltproject.io/en/latest/ref/wheel/all/salt.wheel.minions.html
+
 #########################################################################################
 
 $arg = @{match = 'ubu'}
