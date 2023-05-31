@@ -1,3 +1,22 @@
+<#
+.SYNOPSIS
+    Sets the key state for a minion(s).
+.DESCRIPTION
+    This function will use the Invoke-SaltApiFunction to call the key.accept, key.reject or key.delete function depending on the value specified for KeyState.
+.EXAMPLE
+    Set-SaltApiKeyState -Match minion1 -KeyState accept
+
+    This will accept an unaccepted key for a minion matching 'minion1'.
+.EXAMPLE
+    Set-SaltApiKeyState -Match minion1 -KeyState delete
+
+    This will delete the key for a minion matching 'minion1'.
+.OUTPUTS
+    PSCustomObject
+.NOTES
+    General notes
+.LINK
+#>
 function Set-SaltApiKeyState {
     [CmdletBinding(SupportsShouldProcess = $true)]
     param (
@@ -35,9 +54,15 @@ function Set-SaltApiKeyState {
 
     $return = Invoke-SaltApiFunction @parameters
 
-    Add-Member -InputObject $return.Content.data -MemberType NoteProperty -Name Match -Value $match 
+    $minions = @()
 
-    $return.Content.data
+    foreach ($minion in $return.Content.data.return.minions) {
+        $minions += $minion
+    }
     
+    Add-Member -InputObject $return.Content.data -MemberType NoteProperty -Name Match -Value $match 
+    Add-Member -InputObject $return.Content.data -MemberType NoteProperty -Name Minions -Value $minions
+
+    Write-Output $return.Content.data    
 
 }

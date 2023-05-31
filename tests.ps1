@@ -26,7 +26,11 @@ Invoke-SaltApiFunction -Client local -Target '*' -Function 'test.version' -SkipC
 Invoke-SaltApiFunction -Client local -Target '*' -Function 'test.ping' -SkipCertificateCheck 
 
 Invoke-SaltApiFunction -Client local -Target '*' -Function 'grains.items' -SkipCertificateCheck
-Invoke-SaltApiFunction -Client local -Target '*' -Function 'grains.get' -SkipCertificateCheck -Arg 'nodename'
+Invoke-SaltApiFunction -Client local -Target '*' -Function 'grains.get' -SkipCertificateCheck -Arg 'ubu'
+
+Invoke-SaltApiFunction -SkipCertificateCheck -Client runner -Target ubu -Function cache.grains
+
+Invoke-SaltApiFunction -SkipCertificateCheck -Client runner -Kwarg @{tgt = 'ubu'} -Function cache.grains
 
 # https://docs.saltproject.io/en/latest/ref/wheel/all/salt.wheel.minions.html
 
