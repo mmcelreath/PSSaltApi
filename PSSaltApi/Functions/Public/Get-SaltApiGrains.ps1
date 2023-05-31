@@ -27,7 +27,9 @@ function Get-SaltApiGrains {
         $Target,
         [String]
         [Validateset('glob','compound','grain','list')]
-        $TargetType = 'glob'
+        $TargetType = 'glob',
+        [Switch]
+        $SkipCertificateCheck = $false
     )
 
     # Check to see if there is an existing connection to SaltStack
