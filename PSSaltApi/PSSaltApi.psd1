@@ -12,7 +12,7 @@
     RootModule = 'PSSaltApi.psm1'
     
     # Version number of this module.
-    ModuleVersion = '0.0.2'
+    ModuleVersion = '0.0.3'
     
     # Supported PSEditions
     # CompatiblePSEditions = @()
@@ -33,7 +33,7 @@
     Description = 'SaltStack API module. Provides function wrappers for the salt-api.'
     
     # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
-    FunctionsToExport = @('Connect-SaltApi', 'Disconnect-SaltApi', 'Invoke-SaltApiFunction', 'Get-SaltApiKeyState', 'Set-SaltApiKeyState', 'Get-SaltApiGrains')
+    FunctionsToExport = @('Connect-SaltApi', 'Disconnect-SaltApi', 'Invoke-SaltApiFunction', 'Get-SaltApiKeyState', 'Set-SaltApiKeyState', 'Get-SaltApiCacheGrains', 'Get-SaltApiMinionGrain')
     
     # Minimum version of the PowerShell engine required by this module
     # PowerShellVersion = ''
