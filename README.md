@@ -6,9 +6,13 @@ A global variable ($global:SaltAPIConnection) will be set with the Servername & 
 
 To use this module, a Salt Master needs to be configured with REST_CHERRYPY. Here are some helpful links that got me started.
 
-https://docs.saltproject.io/en/latest/ref/netapi/all/salt.netapi.rest_cherrypy.html
-https://docs.saltproject.io/en/latest/topics/eauth/index.html#acl-eauth
-https://docs.saltproject.io/en/latest/topics/eauth/access_control.html#acl
+[REST_CHERRYPY](https://docs.saltproject.io/en/latest/ref/netapi/all/salt.netapi.rest_cherrypy.html)
+
+[EXTERNAL AUTHENTICATION SYSTEM](https://docs.saltproject.io/en/latest/topics/eauth/index.html)
+
+[ACCESS CONTROL SYSTEM](https://docs.saltproject.io/en/latest/topics/eauth/access_control.html#acl)
+
+[SaltStack for Developers - YouTube video - No Sound Unfortunately](https://www.youtube.com/watch?v=pGW20NPAwuo&t=1491s)
 
 ## External Authentication System (eAuth)
 
