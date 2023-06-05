@@ -1,18 +1,18 @@
 <#
 .SYNOPSIS
-    Gets all grains for Minions returned by a Target.
+    Gets cached grains of the targeted minions.
 .DESCRIPTION
     This function will use the Invoke-SaltApiFunction to call the cache.grains function returning a list of minions and their grains. TargetType defaults to 'glob'.
 .EXAMPLE
-    Get-SaltApiGrains -Target '*'
+    Get-SaltApiCacheGrains -Target '*'
 
     This will return the grains for all Minions.
 .EXAMPLE
-    Get-SaltApiGrains -Target 'minion1'
+    Get-SaltApiCacheGrains -Target 'minion1'
 
     This will return the grains for 'minion1'.
 .EXAMPLE
-    Get-SaltApiGrains -Target 'G@os:Ubuntu' -TargetType compound
+    Get-SaltApiCacheGrains -Target 'G@os:Ubuntu' -TargetType compound
 
     Using a compound query, this will return the grains for minions where 'os' equals 'Ubuntu'.
 .OUTPUTS
@@ -21,7 +21,7 @@
     General notes
 .LINK
 #>
-function Get-SaltApiGrains {
+function Get-SaltApiCacheGrains {
     param (
         [String]
         $Target,
@@ -37,6 +37,8 @@ function Get-SaltApiGrains {
         Write-Error 'You are not currently connected to any SaltStack APIs. Please connect first using Connect-SaltApi.'
         return
     }
+
+    $TargetType = $TargetType.ToLower()
 
     $kwarg = @{
         tgt = $Target
