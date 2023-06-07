@@ -2,7 +2,7 @@
 .SYNOPSIS
     Gets the state of Minion keys.
 .DESCRIPTION
-    This function will use the Invoke-SaltApiFunction to call the key.list function returning a list of minions for the provided $KeyState.
+    This function will use Invoke-SaltApi to call the key.list function returning a list of minions for the provided $KeyState.
 .EXAMPLE
     Get-SaltApiKeyState
 

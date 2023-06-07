@@ -6,13 +6,13 @@ Running `Connect-SaltApi` with a valid credential will generate a new token and 
 ## Example - Connect to the salt-api running on port 8000 of the specified Salt Master using a given credential
 
 ```powershell
-Connect-SaltApi -Server 127.0.0.1 -Port 8000 -Credential $credential
+PS> Connect-SaltApi -Server 127.0.0.1 -Port 8000 -Credential $credential
 ```
 
 ## Example - Connect to the salt-api using the ldap External Authentication System
 
 ```powershell
-Connect-SaltApi -Server 127.0.0.1 -Port 8000 -Credential $credential -eAuthSystem ldap
+PS> Connect-SaltApi -Server 127.0.0.1 -Port 8000 -Credential $credential -eAuthSystem ldap
 ```
 
 ## Example - Connect to a salt-api server that does not have a valid certificate (TESTING ONLY!)
@@ -20,5 +20,5 @@ Connect-SaltApi -Server 127.0.0.1 -Port 8000 -Credential $credential -eAuthSyste
 > Use this method only in test environments where valid certificates are not possible. Do not use in Production
 
 ```powershell
-Connect-SaltApi -Server 127.0.0.1 -Port 8000 -Credential $credential -SkipCertificateCheck
+PS> Connect-SaltApi -Server 127.0.0.1 -Port 8000 -Credential $credential -SkipCertificateCheck
 ```
