@@ -29,9 +29,11 @@ function Get-SaltApiKeyState {
     )
 
     # Check to see if there is an existing connection to SaltStack
-    if (!$global:SaltAPIConnection) {
-        Write-Error 'You are not currently connected to any SaltStack APIs. Please connect first using Connect-SaltApi.'
-        return
+    try {
+        Check-SaltAPIConnection
+    }
+    catch {
+        throw $_
     }
 
     $kwarg = @{match = $KeyState }

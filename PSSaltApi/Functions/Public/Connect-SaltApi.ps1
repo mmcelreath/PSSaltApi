@@ -105,19 +105,25 @@
 
         $tokenDetails = $tokenRequest.Content | convertfrom-json | select -ExpandProperty return
 
-        $properties = @{
-            Server = $server
-            Port   = $port
-            URL    = $url
-            Token  = $tokenDetails.token
-            Expire = $tokenDetails.expire
-            Start  = $tokenDetails.start
-            User   = $tokenDetails.user
-            eAuth  = $tokenDetails.eauth
-            perms  = $tokenDetails.perms            
+        $startDate = ConvertFrom-UnixTimestamp -UnixTimestamp $tokenDetails.start
+        $expireDate = ConvertFrom-UnixTimestamp -UnixTimestamp $tokenDetails.expire
+
+        $properties = [PSCustomObject]@{
+            Server     = $server
+            Port       = $port
+            URL        = $url
+            Token      = $tokenDetails.token
+            Expire     = $tokenDetails.expire
+            Start      = $tokenDetails.start
+            ExpireDate = $expireDate
+            StartDate  = $startDate
+            User       = $tokenDetails.user
+            eAuth      = $tokenDetails.eauth
+            perms      = $tokenDetails.perms            
         }
 
-        $global:SaltAPIConnection = New-Object -TypeName psobject -Property $properties
+        # Set the global connection variable
+        $global:SaltAPIConnection = $properties
     
         # Return the connection object
         $global:SaltAPIConnection
