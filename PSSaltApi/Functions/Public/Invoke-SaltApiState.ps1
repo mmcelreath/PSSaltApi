@@ -48,9 +48,13 @@ function Invoke-SaltApiState {
 
     $TargetType = $TargetType.ToLower()
     $arg = @()
-
-    $arg += @($state)
-    $function = 'state.apply'
+    
+    if ($State -eq 'highstate') {
+        $function = 'state.highstate'
+    } else {
+        $function = 'state.apply'
+        $arg += @($state)
+    }
 
     if ($Exclude) {
         $arg += "exclude=$Exclude"
