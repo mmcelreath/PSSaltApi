@@ -1,7 +1,30 @@
-# Add note about 400 Bad Request
-# Client disabled: 'wheel'. Add to 'netapi_enable_clients' master config option to enable.
+<#
+.SYNOPSIS
+    Invokes functions against a Salt Master running REST_CHERRYPY using Salt's Python API (https://docs.saltproject.io/en/latest/ref/clients/index.html#python-api)
+.DESCRIPTION
+    Everything possible at the CLI is possible through the Python API. Commands are executed on the Salt Master.
 
+    Invoke-SaltApiFunction accepts a Target paramerter as well as parameters for both arguments ($Arg) and kwargs ($kwarg). Arguments are passed in as Arrays and kwargs are passed in as a hashtable (or dictionary).
+.EXAMPLE
+    PS> $arg = @('highstate')
+    PS> Invoke-SaltApiFunction -Client local -Function 'state.apply' -Target '*' -Arg $arg
 
+    Run the state.apply function on the 'local' client to run the teststate sls against all minions.
+.EXAMPLE
+    PS> Invoke-SaltApiFunction -Client runner -Function cache.grains -Kwarg @{tgt = 'minion1'}
+
+    Run the cache.grains function on the runner client to get cache grains for the target minion1.
+.EXAMPLE
+    PS> $kwarg = @{match=@('minion1', 'minion2')}
+    PS> Invoke-SaltApiFunction -Client wheel -Function 'key.finger' -Kwarg $kwarg
+
+    Run the key.finger function on the wheel client to get the public key fingerprint for the list of minions.
+.OUTPUTS
+    PSCustomObject
+.NOTES
+    General notes
+.LINK
+#>
 function Invoke-SaltApiFunction {
     [CmdletBinding(SupportsShouldProcess = $true)]
     param (

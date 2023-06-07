@@ -17,7 +17,7 @@ PS> Get-SaltApiCacheGrains -Target '*'
 MinionID Grains
 -------- ------
 minion1  @{cwd=/; ip_gw=True; …}
-ubu      @{cwd=/; ip_gw=True; …}
+minion2  @{cwd=/; ip_gw=True; …}
 ```
 
 ## Example - Return the grains for 'minion1'

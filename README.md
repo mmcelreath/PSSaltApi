@@ -51,11 +51,11 @@ The `PSSaltApi` module provides a wrapper function to interface with the `salt-a
 
 StatusCode StatusDescription Content      
 ---------- ----------------- -------      
-       200 OK                @{ubu=3006.1}
+       200 OK                @{minion2=3006.1}
 
 > $return.Content
 
-ubu   
+minion2   
 ---   
 3006.1
 
