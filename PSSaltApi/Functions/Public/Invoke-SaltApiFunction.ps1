@@ -87,6 +87,7 @@ function Invoke-SaltApiFunction {
     $body = @{
         client = $Client
         fun    = $Function
+        # tgt_type = 'compound'
         # tgt    = $Target
         # arg    = @('highstate')
         # match   = @('minion1')

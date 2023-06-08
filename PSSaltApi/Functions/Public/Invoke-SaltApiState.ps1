@@ -1,16 +1,20 @@
 <#
 .SYNOPSIS
-    Sets the key state for a minion(s).
+    Applies a state or states to the specified Target.
 .DESCRIPTION
-    This function will use the Invoke-SaltApiFunction to call the key.accept, key.reject or key.delete function depending on the value specified for KeyState.
+    This function will use Invoke-SaltApiFunction to call the state.apply or state.highstate function.
 .EXAMPLE
-    Set-SaltApiKeyState -Match minion1 -KeyState accept
+    PS> Invoke-SaltApiState -Target '*' -State teststate
 
-    This will accept an unaccepted key for a minion matching 'minion1'.
+    Runs the state called 'teststate' against all minions.
 .EXAMPLE
-    Set-SaltApiKeyState -Match minion1 -KeyState delete
+    PS> Invoke-SaltApiState -Target '*' -State highstate
 
-    This will delete the key for a minion matching 'minion1'.
+    Runs a highstate against all minions.
+.EXAMPLE
+    PS> Invoke-SaltApiState -Target '*' -State highstate
+
+    Runs a highstate against all minions.
 .OUTPUTS
     PSCustomObject
 .NOTES
@@ -23,11 +27,11 @@ function Invoke-SaltApiState {
         [Parameter(Mandatory = $true)]
         [String]
         $Target,
-        [Parameter(Mandatory = $true)]
+        [Parameter(Mandatory = $false)]
         [String]
         $State,
         [String]
-        [Validateset('glob','compound')] # To add: 'grain','list'
+        [Validateset('glob','compound','grain','list')]
         $TargetType = 'glob',
         [String]
         $Exclude,
@@ -64,9 +68,14 @@ function Invoke-SaltApiState {
         $arg += 'test=true'
     }
 
+    $kwarg = @{
+        tgt      = $Target
+        tgt_type = $TargetType
+    }
+
     $parameters = @{
         Client               = 'local'
-        Target               = $Target
+        kwarg                = $kwarg
         Function             = $function
         Arg                  = $arg
         SkipCertificateCheck = $SkipCertificateCheck
