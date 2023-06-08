@@ -1,7 +1,9 @@
 # Invoke-SaltApiFunction - Examples
-Gets grains for Minions returned by a Target.
+Invokes functions against a Salt Master running REST_CHERRYPY using [Salt's Python API](https://docs.saltproject.io/en/latest/ref/clients/index.html#python-api)
 
-This function will use Invoke-SaltApiFunction to call the grains.get or grains.items function returning a list of minions and their grains. TargetType defaults to `glob`.
+Everything possible at the CLI is possible through the Python API. Commands are executed on the Salt Master.
+
+Invoke-SaltApiFunction accepts a Target paramerter as well as parameters for both arguments ($Arg) and kwargs ($kwarg). Arguments are passed in as Arrays and kwargs are passed in as a hashtable (or dictionary).
 
 ### Connect to the salt-api
 
