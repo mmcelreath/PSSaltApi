@@ -36,24 +36,24 @@ The `PSSaltApi` module provides a wrapper function to interface with the `salt-a
 
 ```powershell
 # Install Module
-> Install-Module PSSaltApi
+PS> Install-Module PSSaltApi
 
-> $credential = Get-Credential
+PS> $credential = Get-Credential
 
 # Connect to salt-api using the provided credential
 # This command will create a Global variable called $global:SaltAPIConnection which will be used for the rest of the functions in this module
-> Connect-SaltApi -Server <SALT_MASTER> -Port 8000 -Credential $credential
+PS> Connect-SaltApi -Server <SALT_MASTER> -Port 8000 -Credential $credential
 
 # This command will use the local client to target all minions ('*') and execute the test.version function
-> $return = Invoke-SaltApiFunction -Client local -Target '*' -Function 'test.version'
+PS> $return = Invoke-SaltApiFunction -Client local -Target '*' -Function 'test.version'
 
-> $return
+PS> $return
 
 StatusCode StatusDescription Content      
 ---------- ----------------- -------      
        200 OK                @{minion2=3006.1}
 
-> $return.Content
+PS> $return.Content
 
 minion2   
 ---   
