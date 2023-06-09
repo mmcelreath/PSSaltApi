@@ -32,6 +32,8 @@ Invoke-SaltApiFunction -SkipCertificateCheck -Client runner -Target ubu -Functio
 
 Invoke-SaltApiFunction -SkipCertificateCheck -Client runner -Kwarg @{tgt = 'ubu'} -Function cache.grains
 
+$a = Invoke-SaltApiFunction -SkipCertificateCheck -Client local -Target '*' -Function 'test.arg' -kwarg $kwarg -Arg 'test'
+
 # https://docs.saltproject.io/en/latest/ref/wheel/all/salt.wheel.minions.html
 
 #########################################################################################
