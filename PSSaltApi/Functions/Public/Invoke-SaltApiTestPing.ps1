@@ -1,20 +1,20 @@
 <#
 .SYNOPSIS
-    Applies a state or states to the specified Target.
+    Runs a test ping against a Target.
 .DESCRIPTION
-    This function will use Invoke-SaltApiFunction to call the state.apply or state.highstate function.
+    This function will use Invoke-SaltApiFunction to call the test.ping function.
 .EXAMPLE
-    PS> Invoke-SaltApiState -Target '*' -State teststate
+    PS> Invoke-SaltApiTestPing -Target '*' 
 
-    Runs the state called 'teststate' against all minions.
+    Runs a test ping against all minions
 .EXAMPLE
-    PS> Invoke-SaltApiState -Target '*' -State highstate
+    PS> Invoke-SaltApiTestPing -Target 'minion1' 
 
-    Runs a highstate against all minions.
+    Runs a test ping against a minion called 'minion1'
 .EXAMPLE
-    PS> Invoke-SaltApiState -Target '*' -State highstate
+    PS> Invoke-SaltApiTestPing -Target 'G@os:Ubuntu' -TargetType compound  
 
-    Runs a highstate against all minions.
+    Using a compound query, runs a test ping against minions where os = Ubuntu
 .OUTPUTS
     PSCustomObject
 .NOTES
