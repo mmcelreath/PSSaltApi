@@ -12,9 +12,9 @@
 
     Runs a highstate against all minions.
 .EXAMPLE
-    PS> Invoke-SaltApiState -Target '*' -State highstate
+    PS> Invoke-SaltApiState -Target 'G@os:Ubuntu' -TargetType compound -State highstate
 
-    Runs a highstate against all minions.
+    Run a highstate against the minions returned by a compound Target (os = 'Ubuntu')
 .OUTPUTS
     PSCustomObject
 .NOTES
@@ -85,8 +85,23 @@ function Invoke-SaltApiState {
 
     $minionNames = $return.Content.PSObject.Properties | Where-Object MemberType -eq 'NoteProperty' | Select-Object -ExpandProperty Name
 
-    $obj =  [PSCustomObject]@{}
+    $array = @()
 
-    Write-Output $return
+    foreach ($minion in $minionNames) {
+        $obj = [PSCustomObject]@{
+            MinionID   = $minion
+            Return     = @()
+        }
+
+        $IDs = $return.Content.$minion.PSObject.Properties | Where-Object MemberType -eq 'NoteProperty' | Select-Object -ExpandProperty Name
+        
+        foreach ($id in $IDs) {
+            $obj.Return += $return.Content.$minion.$id
+        }
+
+        $array += $obj
+    }
+
+    Write-Output $array
 
 }

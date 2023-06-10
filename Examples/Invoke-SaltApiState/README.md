@@ -1,9 +1,7 @@
 # Invoke-SaltApiState - Examples
-Invokes functions against a Salt Master running REST_CHERRYPY using [Salt's Python API](https://docs.saltproject.io/en/latest/ref/clients/index.html#python-api)
+Applies a state or states to the specified Target.
 
-Everything possible at the CLI is possible through the Python API. Commands are executed on the Salt Master.
-
-Invoke-SaltApiFunction accepts a Target paramerter as well as parameters for both arguments ($Arg) and kwargs ($kwarg). Arguments are passed in as Arrays and kwargs are passed in as a hashtable (or dictionary).
+This function will use Invoke-SaltApiFunction to call the state.apply or state.highstate function.
 
 ### Connect to the salt-api
 
@@ -11,34 +9,48 @@ Invoke-SaltApiFunction accepts a Target paramerter as well as parameters for bot
 PS> Connect-SaltApi -Server 127.0.0.1 -Port 8000 -Credential $credential
 ```
 
-## Example - Run the state.apply function on the 'local' client to run the teststate sls against all minions
+## Example - Runs the state called 'vim' against 'minion1'
 
 ```powershell
-PS> $arg = @('teststate')
-PS> Invoke-SaltApiFunction -Client local -Function 'state.apply' -Target '*' -Arg $arg
+PS> $result = Invoke-SaltApiState -Target 'minion1' -State vim
 
-StatusCode StatusDescription Content
----------- ----------------- -------
-       200 OK                @{minion1=; minion2=}
+PS> $result
+
+MinionID Return
+-------- ------
+minion1  {@{name=vim; changes=; result=True; comment=The following packages were installed/upd…
+
+PS> $result.Retrun
+
+name        : vim
+changes     : @{vim=; vim-runtime=}
+result      : True
+comment     : The following packages were installed/updated: vim
+__sls__     : vim
+__run_num__ : 0
+start_time  : 20:21:15.360308
+duration    : 7635.743
+__id__      : vim
 ```
 
-## Example - Run the cache.grains function on the runner client to get cache grains for the target minion1
+## Example - Runs a highstate against all minions
 
 ```powershell
-PS> Invoke-SaltApiFunction -Client runner -Function cache.grains -Kwarg @{tgt = 'minion1'}
+PS> Invoke-SaltApiState -Target '*' -State highstate
 
-StatusCode StatusDescription Content
----------- ----------------- -------
-       200 OK                @{minion1=}
+MinionID Return
+-------- ------
+minion2  {@{name=/etc/Test1.conf; changes=; result=True; comment=Updated times on file /etc/T…
+minion1  {@{name=/etc/Test1.conf; changes=; result=True; comment=Updated times on file /etc/T…
 ```
 
-## Example - Run the key.finger function on the wheel client to get the public key fingerprint for the list of minions
+## Example - Run a highstate against the minions returned by a compound Target (os = 'Ubuntu')
 
 ```powershell
-PS> $kwarg = @{match=@('minion1', 'minion2')}
-PS> Invoke-SaltApiFunction -Client wheel -Function 'key.finger' -Kwarg $kwarg
+PS> Invoke-SaltApiState -Target 'G@os:Ubuntu' -TargetType compound -State highstate
 
-StatusCode StatusDescription Content
----------- ----------------- -------
-       200 OK                @{tag=salt/wheel/202306092054262424261; data=}
+MinionID Return
+-------- ------
+ubu      {@{name=/etc/Test1.conf; changes=; result=True; comment=Updated times on file…
+minion1  {@{name=/etc/Test1.conf; changes=; result=True; comment=Updated times on file…
 ```
