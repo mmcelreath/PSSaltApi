@@ -110,10 +110,19 @@ function Invoke-SaltApiFunction {
 
     $webRequestParams = @{
         Uri                  = $url 
-        SkipCertificateCheck = $SkipCertificateCheck
         Body                 = (ConvertTo-Json $body)
         Headers              = $header
         Method               = 'Post'
+    }
+
+    # For PowerShell versions previous to 6.0, Invoke-WebRequest -SkipCertificateCheck was not available. The SkipCertificateCheck functionality is implemented in the Connect-SaltApi command that gets run first
+    # For newer PowerShell versions, add -SkipCertificateCheck to the list of parameters for Invoke-WebRequest
+    if (($PSEdition -eq 'Desktop') -and ($SkipCertificateCheck -eq $true)) {
+        # Add -UseBasicParsing parameter to avoid the error: "Internet Explorer engine is not available, or Internet Explorer's first-launch configuration is not complete"
+        $webRequestParams.Add('UseBasicParsing', $true)
+
+    } else {
+        $webRequestParams.Add('SkipCertificateCheck', $SkipCertificateCheck)
     }
 
     if ($TimeoutSec) {
