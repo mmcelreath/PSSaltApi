@@ -65,7 +65,26 @@
     }
     
     try {
+        $header = @{
+            'Accept'       = 'application/json'
+            'Content-type' = 'application/json'
+        }
+        
+        $body = @{
+            username = $username
+            password = $password
+            eauth    = $eAuthSystem
+        }
+
+        $tokenRequestParams = @{
+            Uri = $url 
+            Body = (ConvertTo-Json $body)
+            Headers = $header
+            Method = 'Post'
+        }
+
         # For PowerShell versions previous to 6.0, Invoke-WebRequest -SkipCertificateCheck was not available. So use the code below if $SkipCertificateCheck = $true
+        # For newer PowerShell versions, add -SkipCertificateCheck to the list of parameters for Invoke-WebRequest
         if (($PSEdition -eq 'Desktop') -and ($SkipCertificateCheck -eq $true)) {
             # This if statement is using example code from https://stackoverflow.com/questions/11696944/powershell-v3-invoke-webrequest-https-error
             add-type @"
@@ -80,25 +99,12 @@
             }
 "@
             [System.Net.ServicePointManager]::CertificatePolicy = New-Object TrustAllCertsPolicy
-        }
 
-        $header = @{
-            'Accept'       = 'application/json'
-            'Content-type' = 'application/json'
-        }
-        
-        $body = @{
-            username = $username
-            password = $password
-            eauth    = $eAuthSystem
-        }
+            # Add -UseBasicParsing parameter to avoid the error: "Internet Explorer engine is not available, or Internet Explorer's first-launch configuration is not complete"
+            $tokenRequestParams.Add('UseBasicParsing', $true)
 
-        $tokenRequestParams = @{
-            Uri = $url 
-            SkipCertificateCheck = $SkipCertificateCheck
-            Body = (ConvertTo-Json $body)
-            Headers = $header
-            Method = 'Post'
+        } else {
+            $tokenRequestParams.Add('SkipCertificateCheck', $SkipCertificateCheck)
         }
 
         $tokenRequest = Invoke-WebRequest @tokenRequestParams

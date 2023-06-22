@@ -20,7 +20,7 @@
         $user = $global:SaltAPIConnection.User
         $global:SaltAPIConnection = $null
         Remove-Variable -Name SaltAPIConnection -Scope global -Force -ErrorAction SilentlyContinue
-        Write-Warning "$user has been disconnected fromn $URL. To run commands against the salt-api, run Connect-SaltApi to create a new connection."
+        Write-Warning "$user has been disconnected from $URL. To run commands against the salt-api, run Connect-SaltApi to create a new connection."
     }
 
 }
