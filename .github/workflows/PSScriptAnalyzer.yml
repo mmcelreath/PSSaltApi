@@ -34,6 +34,7 @@ jobs:
       - name: List Directory
         shell: pwsh
         run: |
+          pwd
           ls
 
       - name: Run PSScriptAnalyzer
